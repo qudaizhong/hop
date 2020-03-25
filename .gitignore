@@ -11,6 +11,8 @@ logs/
 # files for the dex VM
 *.dex
 
+
+
 # Java class files
 *.class
 *.jar
@@ -32,3 +34,7 @@ gen/
 *.ipr
 
 application-prod.properties
+
+classes/
+output/
+web/
