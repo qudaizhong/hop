@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<properties resource="generator.properties" />
+
+	<classPathEntry location="${generator.mysql.location}" />
+
+	<context id="mysql">
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+
+		<commentGenerator
+			type="com.qdz.hop.plugins.mybatis.MyCommentGenerator">
+		</commentGenerator>
+
+		<jdbcConnection driverClass="${jdbc.driver}"
+			connectionURL="${jdbc.url}" userId="${jdbc.user}"
+			password="${jdbc.password}">
+			<property name="useInformationSchema" value="true"></property>
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="${po}"
+			targetProject="./src/main/java">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="${xml}"
+			targetProject="./src/main/resources">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="${mapper}" targetProject="./src/main/java">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+
+		<!-- schema="${gererator3.schema}" -->
+		<table tableName="sys_role_menu_relevancy">
+<!-- 		<table tableName="sys%" enableCountByExample="false" -->
+<!-- 			enableUpdateByExample="false" enableDeleteByExample="false" -->
+<!-- 			enableSelectByExample="false" selectByExampleQueryId="false"> -->
+<!-- 			<property name="useActualColumnNames" value="false" /> -->
+<!-- 		</table> -->
+
+	       	<!-- 数据库表主键 -->
+<!--     		<generatedKey column="id" sqlStatement="Mysql" identity="true" /> -->
+		</table>
+	</context>
+
+</generatorConfiguration>

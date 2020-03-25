@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdz.hop.dao.SysRolePermissionRelevancyDao">
+    
+    <select id="findPermissionsByUserId" resultMap="com.qdz.hop.mapper.sys.mapper.SysPermissionMapper.BaseResultMap">
+		SELECT
+		    sp.* 
+		FROM
+		    sys_admin_role_relevancy sarr
+		    LEFT JOIN sys_admin_role sar ON sarr.role_id = sar.id
+		    LEFT JOIN sys_role_pernission_relevancy srpr ON sar.id = srpr.role_id
+		    LEFT JOIN sys_permission sp ON srpr.permission_id = sp.id 
+		WHERE
+		    sarr.admin_user_id = #{userId}
+	    AND 
+	        sp.id IS NOT NULL
+    </select>
+    
+    <select id="findRoles" resultMap="com.qdz.hop.mapper.sys.mapper.SysAdminRoleMapper.BaseResultMap">
+       SELECT
+		    sar.* 
+	   FROM
+		    sys_admin_role_relevancy sarr
+		    LEFT JOIN sys_admin_role sar ON sarr.role_id = sar.id 
+	   WHERE
+		    sar.`status` = '1' 
+       AND 
+            sarr.admin_user_id = #{userId}
+    </select>
+    
+    <select id="findPermissionsByRoleID" resultMap="com.qdz.hop.mapper.sys.mapper.SysPermissionMapper.BaseResultMap">
+		SELECT
+		      sar.*
+		FROM
+		      sys_role_pernission_relevancy srpr
+		      LEFT JOIN sys_admin_role sar ON srpr.role_id = sar.id
+		WHERE
+		      sar.`status` = '1'
+		AND 
+		      srpr.role_id = #{roleId}
+    </select>
+    
+    <insert id="insertPermissionRelevancyList">
+        INSERT INTO sys_role_pernission_relevancy (id, role_id, permission_id) VALUES
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.id, jdbcType=VARCHAR},
+            #{item.roleId, jdbcType=VARCHAR},
+            #{item.permissionId, jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+<!--     <insert id="insertList">
+        INSERT INTO ums_admin_role_relation (admin_id, role_id) VALUES
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.adminId,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=BIGINT})
+        </foreach>
+    </insert>
+    <select id="getRoleList" resultMap="com.macro.mall.mapper.UmsRoleMapper.BaseResultMap">
+        select r.*
+        from ums_admin_role_relation ar left join ums_role r on ar.role_id = r.id
+        where ar.admin_id = #{adminId}
+    </select>
+    <select id="getRolePermissionList" resultMap="com.macro.mall.mapper.UmsPermissionMapper.BaseResultMap">
+        select p.*
+        from ums_admin_role_relation ar left join ums_role r on ar.role_id = r.id
+            left join ums_role_permission_relation rp on r.id = rp.role_id
+            left join ums_permission p on rp.permission_id=p.id
+            where ar.admin_id = #{adminId} and p.id is not null
+    </select>
+    <select id="getPermissionList" resultMap="com.macro.mall.mapper.UmsPermissionMapper.BaseResultMap">
+        SELECT
+            p.*
+        FROM
+            ums_admin_role_relation ar
+            LEFT JOIN ums_role r ON ar.role_id = r.id
+            LEFT JOIN ums_role_permission_relation rp ON r.id = rp.role_id
+            LEFT JOIN ums_permission p ON rp.permission_id = p.id
+        WHERE
+            ar.admin_id = #{adminId}
+            AND p.id IS NOT NULL
+            AND p.id NOT IN (
+                SELECT
+                    p.id
+                FROM
+                    ums_admin_permission_relation pr
+                    LEFT JOIN ums_permission p ON pr.permission_id = p.id
+                WHERE
+                    pr.type = - 1
+                    AND pr.admin_id = #{adminId}
+            )
+        UNION
+        SELECT
+            p.*
+        FROM
+            ums_admin_permission_relation pr
+            LEFT JOIN ums_permission p ON pr.permission_id = p.id
+        WHERE
+            pr.type = 1
+            AND pr.admin_id = #{adminId}
+    </select> -->
+</mapper>
